@@ -1,31 +1,31 @@
 # Tybalt Extruder
 ## Step 1
-![Img](/docs/build_extr_assembly_01.scad)
+![Img](/docs/extr_assembly_01.png)
 
 ## Step 2
-![Img](/docs/build_extr_assembly_02.scad)
+![Img](/docs/extr_assembly_02.png)
 
 ## Step 3
-![Img](/docs/build_extr_assembly_03.scad)
+![Img](/docs/extr_assembly_03.png)
 
 ## Step 4
-![Img](/docs/build_extr_assembly_04.scad)
+![Img](/docs/extr_assembly_04.png)
 
 ## Step 5
-![Img](/docs/build_extr_assembly_05.scad)
+![Img](/docs/extr_assembly_05.png)
 
 ## Step 6
-![Img](/docs/build_extr_assembly_06.scad)
+![Img](/docs/extr_assembly_06.png)
 
 ## Step 7
-![Img](/docs/build_extr_assembly_07.scad)
+![Img](/docs/extr_assembly_07.png)
 
 ## Step 8
-![Img](/docs/build_extr_assembly_08.scad)
+![Img](/docs/extr_assembly_08.png)
 
 ## Step 9
-![Img](/docs/build_extr_assembly_09.scad)
+![Img](/docs/extr_assembly_09.png)
 
 ## Step 10
-![Img](/docs/build_extr_assembly_10.scad)
+![Img](/docs/extr_assembly_10.png)
 

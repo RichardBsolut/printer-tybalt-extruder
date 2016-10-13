@@ -14,6 +14,6 @@ ${ASM_MODULES}: readmemd
 		$(shell grep -A2 'module $@' assembly.scad | head -5 | grep '// *view:' | sed 's/[^]0-9.,-]//g' | sed 's/[]]/,/g' | sed 's/^/--camera=/') \
 		-o docs/$@.png 2<&1
 	echo "## $(shell grep -A2 'module $@' assembly.scad | head -5 | grep '// *title:' | sed -n 's/.*title*: \(.*$\\)/\1/p')" >> readme.md
-	echo "![Img](/docs/build_$@.scad)" >> readme.md
+	echo "![Img](/docs/$@.png)" >> readme.md
 	echo "" >> readme.md
-	@rm -f docs/$@.scad
+	@rm -f docs/build_$@.scad
