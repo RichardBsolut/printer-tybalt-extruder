@@ -16,4 +16,4 @@ ${ASM_MODULES}: readmemd
 	echo "## $(shell grep -A2 'module $@' assembly.scad | head -5 | grep '// *title:' | sed -n 's/.*title*: \(.*$\\)/\1/p')" >> readme.md
 	echo "![Img](/docs/build_$@.scad)" >> readme.md
 	echo "" >> readme.md
-	@rm -f docs/build_$@.scad
+	@rm -f docs/$@.scad
