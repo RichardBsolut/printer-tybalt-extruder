@@ -5,6 +5,8 @@ main: $(ASM_MODULES)
 
 readmemd:
 	@echo "# Tybalt Extruder" > readme.md
+	@echo "compact 4:1 planetary gearbox extruder " >> readme.md
+	@echo "based on [Lodran](https://github.com/Lodran/planetary-gearbox-extruder) Design [youmagine](https://www.youmagine.com/designs/planetary-gearbox-extruder)" >> readme.md
 
 ${ASM_MODULES}: readmemd
 	@echo "use <../assembly.scad>" > docs/build_$@.scad
@@ -13,7 +15,7 @@ ${ASM_MODULES}: readmemd
 		--csglimit=2000000 --imgsize=880,810 --projection=p \
 		$(shell grep -A2 'module $@' assembly.scad | head -5 | grep '// *view:' | sed 's/[^]0-9.,-]//g' | sed 's/[]]/,/g' | sed 's/^/--camera=/') \
 		-o docs/$@.png 2<&1
-	echo "## $(shell grep -A2 'module $@' assembly.scad | head -5 | grep '// *title:' | sed -n 's/.*title*: \(.*$\\)/\1/p')" >> readme.md
-	echo "![Img](/docs/$@.png)" >> readme.md
-	echo "" >> readme.md
+	@echo "## $(shell grep -A2 'module $@' assembly.scad | head -5 | grep '// *title:' | sed -n 's/.*title*: \(.*$\\)/\1/p')" >> readme.md
+	@echo "![Img](/docs/$@.png)" >> readme.md
+	@echo "" >> readme.md
 	@rm -f docs/build_$@.scad

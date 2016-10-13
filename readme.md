@@ -1,4 +1,6 @@
 # Tybalt Extruder
+compact 4:1 planetary gearbox extruder 
+based on [Lodran](https://github.com/Lodran/planetary-gearbox-extruder) Design [youmagine](https://www.youmagine.com/designs/planetary-gearbox-extruder)
 ## Step 1
 ![Img](/docs/extr_assembly_01.png)
 
