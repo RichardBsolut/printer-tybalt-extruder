@@ -158,3 +158,71 @@ module extr_assembly_10(explode=true) {
             zflip() hobbedPulley();
     }
 }
+
+
+module extr_assembly_11(explode=true) {
+    // view: [ 0.00, 0.00, 0.00 ] [ 73.90, 0.00, 68.40 ] 680
+    // title: Step 11
+    // desc: 
+    h = base_size[z]+annulus_size[z]+cover_size[z];
+    extr_assembly_10(false);
+    
+    move(z=h+(explode?25:0)) {
+        if(explode) move(z=0) yrot(-90) arrow();       
+        extruderCover();
+        move(z=11-2+(explode?60:0)) { 
+            yflip_copy()
+            move(x=-motorScrewSpacing/2,y=-motorScrewSpacing/2) {
+                if(explode) move(z=-50) yrot(-90) arrow();
+                color("silver") screw(screwsize=3,screwlen=40,headlen=2);
+            }
+        }
+    }
+    
+}
+
+module extr_assembly_12(explode=true) {
+    // view: [ 0.00, 0.00, 0.00 ] [ 56.40, 0.00, 43.20 ] 360
+    // title: Step 12
+    // desc: 
+    h=11;
+    BEARING_H = get_bearing_height(IDLER_BEAR);
+    yrot(explode?90:0) {
+        idler();        
+        move(x=-0.5-(explode?50:0), y=motorScrewSpacing/2,z=(h-(BEARING_H))/2+0.5) {
+            if(explode) move(x=25,z=BEARING_H/2) zrot(180) arrow();       
+            bearing(608,outline=true);
+        }
+    }
+}
+
+module extr_assembly_13(explode=true) {
+    // view: [ 0.00, 0.00, 0.00 ] [ 52.90, 0.00, 20.10 ] 360
+    // title: Step 13
+    // desc: 
+    
+    extr_assembly_12(false);
+    h=11;
+    BEARING_H = get_bearing_height(IDLER_BEAR);
+    move(x=-0.5, y=motorScrewSpacing/2,z=(h-(BEARING_H+1))/2+(explode?30:0)) { 
+        if(explode) move(z=-8) yrot(-90) arrow();   
+        move(z=11+2.5)
+            zflip() plug();
+    }
+}
+
+module extr_assembly_14(explode=true) {
+    // view: [ 0.00, 0.00, 0.00 ] [ 60.60, 0.00, 62.80 ] 680
+    // title: Step 14
+    // desc: 
+    h = base_size[z]+annulus_size[z]+cover_size[z];
+    extr_assembly_11(false);
+    move(x=motorScrewSpacing/2,y=-motorScrewSpacing/2, z=h+(explode?40:0)) {
+        extr_assembly_13(false);    
+        move(z=11+(explode?60:0)) {
+            if(explode) move(z=-48) yrot(-90) arrow();   
+            if(explode) move(z=-90) yrot(-90) arrow();   
+            color("silver") screw(screwsize=3,screwlen=40,headlen=2);
+        }
+    }    
+}

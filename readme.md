@@ -31,3 +31,15 @@ based on [Lodran](https://github.com/Lodran/planetary-gearbox-extruder) Design [
 ## Step 10
 ![Img](/docs/extr_assembly_10.png)
 
+## Step 11
+![Img](/docs/extr_assembly_11.png)
+
+## Step 12
+![Img](/docs/extr_assembly_12.png)
+
+## Step 13
+![Img](/docs/extr_assembly_13.png)
+
+## Step 14
+![Img](/docs/extr_assembly_14.png)
+
