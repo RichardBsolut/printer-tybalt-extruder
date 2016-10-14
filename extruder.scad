@@ -112,6 +112,7 @@ module plug() { //part
 }
 
 
+fullExtruderCover();
 module fullExtruderCover() {
     bearingH = get_bearing_height(115);
 
@@ -149,7 +150,7 @@ module PC401() {
 }
 
 module extruderCover() {
-    h = FilamentZ+4.5;
+    h = FilamentZ+5.5;
 
     headBearD = get_bearing_outer_diam(bearing);
     headBearH = get_bearing_height(bearing);
@@ -176,7 +177,7 @@ module extruderCover() {
             xrot(90) //Lower part
                 cylinder(d=4,h=100);
             xrot(-90) //Funnel upper part
-                cylinder(d1=4,d2=2,h=motorSize/2-4.5+1);
+                cylinder(d1=4,d2=2+fit_clearance,h=motorSize/2-4.5+1);
         }
 
         //Aussparrung PTFE Tube Holder PC4-01
