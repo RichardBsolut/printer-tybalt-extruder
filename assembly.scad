@@ -3,6 +3,20 @@ use <../libs/screw.scad>
 use <../libs/bearing.scad>
 include <./extruder.scad>
 
+
+//===== Parts
+module sun_gear_part(){ sunGear(); }
+module planet_gear_part(){ planetGear(); }
+module base_plate_part(){ basePlate(); }
+module cover_part(){ cover(); }
+module carrier_upper_part(){ planetCarrierUpper(); }
+module carrier_lower_part(){ planetCarrierLower(); }
+module annulus_part(){ annulus(); }
+module extruder_cover_part(){ extruderCover(); }
+
+
+//===== Assembly
+
 module extr_assembly_01(explode=true) {
     // view: [ -4.32, 6.88, 8.19 ] [ 45.50, 0.00, 24.50 ] 260
     // title: Step 1
@@ -292,6 +306,7 @@ module extr_assembly_17(explode=true) {
 }
 
 
+
 module fullassembly() {
     // view: [ 0.00, 0.00, 0.00 ] [ 27.70, 0.00, 327.60 ] 401
     // title: Full assembly
@@ -299,8 +314,15 @@ module fullassembly() {
     
     h = base_size[z]+annulus_size[z]+cover_size[z];
     extr_assembly_17(false);
-    
-    move(x=FilamentX,z=h+FilamentZ)
-    xrot(90)
-    color("black") cylinder(d=1.75,h=100,center=true);
+
+    move(x=FilamentX,z=h+FilamentZ) {
+        xrot(-90)
+        move(z=motorSize/2+13)
+        color("white",0.3)
+            cylinder(d=4,h=20);
+
+        xrot(90) {
+            color("black") cylinder(d=1.75,h=120,center=true);
+        }
+    }
 }

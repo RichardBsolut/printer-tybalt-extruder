@@ -106,7 +106,7 @@ echo("carrier height", planet_carrier_height);
 echo("cover size", cover_size[z]);
 echo("Full Height", base_size[z]+annulus_size[z]+cover_size[z]+11);//11==extruderCover
 
-module plug() {
+module plug() { //part
     cylinder(d=12,h=1.5);
     cylinder(d=8-fit_clearance,h=11+1.5);
 }
@@ -114,14 +114,14 @@ module plug() {
 
 module fullExtruderCover() {
     bearingH = get_bearing_height(115);
-    
+
     bearing(115);
     move(z=HPulleyH+bearingH+0.5)
     zflip() color("silver") hobbedPulley();
-    
+
     move(x=FilamentX,z=FilamentZ)
     xrot(90) %cylinder(d=1.75,h=100,center=true);
-    
+
     intersection() {
         extruderCover();
         move(z=-50+11/2+1+25)
@@ -142,7 +142,7 @@ module PC401() {
             }
             move(z=4+6+5.5)
                 color("blue")cylinder(d=7.8,h=2);
-            
+
         }
         cylinder(d=4,h=100,center=true);
     }
@@ -150,14 +150,14 @@ module PC401() {
 
 module extruderCover() {
     h = FilamentZ+4.5;
-    
-    headBearD = get_bearing_outer_diam(bearing);    
+
+    headBearD = get_bearing_outer_diam(bearing);
     headBearH = get_bearing_height(bearing);
-    
+
     bearD = get_bearing_outer_diam(IDLER_BEAR);
-    bearH = get_bearing_height(IDLER_BEAR);    
-    gap=0.5;   
-    
+    bearH = get_bearing_height(IDLER_BEAR);
+    gap=0.5;
+
     difference() {
         union() {
             hull() {
@@ -170,7 +170,7 @@ module extruderCover() {
                     cylinder(r=5,h=h);
             }
         }
-        
+
         // Aussparrung PTFE Tube
         move(x=FilamentX,z=FilamentZ) {
             xrot(90) //Lower part
@@ -178,12 +178,12 @@ module extruderCover() {
             xrot(-90) //Funnel upper part
                 cylinder(d1=4,d2=2,h=motorSize/2-4.5+1);
         }
-        
-        //Aussparrung PTFE Tube Holder PC4-01 
+
+        //Aussparrung PTFE Tube Holder PC4-01
         move(x=FilamentX,z=FilamentZ,y=motorSize/2-4.5)
         xrot(-90)
             cylinder(d=5.8,h=4.5+1);
-        
+
         // Aussparrung idler
         move(x=10,y=-motorSize/2-10,z=-1) {
             cube([30,40,h+2]);
@@ -195,12 +195,12 @@ module extruderCover() {
                     cylinder(d=bearD+gap*2,h=h+2);
             }
         }
-        
+
 
         move(z=-1) {
             //Cut HobbedPulley
             cylinder(d=HPulleyD+2,h=h+2);
-            //Smooth HobbedPulley to Bearing            
+            //Smooth HobbedPulley to Bearing
             intersection() {
                 hull() {
                     cylinder(d=HPulleyD+2,h=h+2);//Cut HobbedPulley
@@ -211,7 +211,7 @@ module extruderCover() {
                     cube([100,100,100],center=true);
             }
         }
-        
+
         move(x=14-3.5, z=FilamentZ,y=motorScrewSpacing/2)
         yrot(90)
             spannfederCut();
@@ -220,7 +220,7 @@ module extruderCover() {
         yflip_copy()
         move(x=-motorScrewSpacing/2,y=-motorScrewSpacing/2, z=11-4)
             screw(screwlen=h,headlen=6,tolerance=fit_clearance*2);
-        
+
     }
 }
 
@@ -246,7 +246,7 @@ module idler(h=12,diai=8) {
     //Bearing
     BEARING_D = get_bearing_outer_diam(IDLER_BEAR);
     BEARING_H = get_bearing_height(IDLER_BEAR);
-    
+
     difference() {
         union() {//Grundform
             hull() {
@@ -324,8 +324,7 @@ module hobbedPulley() {
             rotate_extrude(convexity=10)
             move(x=HPulleyD/2)
                 circle(d=HPulleyHD);
-
-        //move(z=-1) cylinder(d=5,h=100,center=true); its an render bug .. because of rotate_extrude ?
+        move(z=-1) cylinder(d=5,h=100,center=true);
     }
 }
 
@@ -358,31 +357,31 @@ module basePlate(h=base_size[z]) {
     difference() {
         union() {
             outerBody(h=h);
-            
+
             //Combine plates
             move(x=-motorSize/2-5,y=-motorSize/2,z=h-4)
                 cube([10,motorSize,4]);
             //Profile plate
             move(z=4/2,x=-motorSize/2-20/2,z=h-4/2)
-                rrect([20,motorSize,4],center=true,r=5);            
+                rrect([20,motorSize,4],center=true,r=5);
         }
-        
+
         //Sungear
         cylinder(r=max(sun_gear_hub_radius, gearOuterRadius(sun_teeth)) +moving_clearance*2, h=1000, center=true);
-        
+
         move(z=-1)
             motorSuspensionCut(h=h-base_wall);
 
         //Screws
         motorScrewPos(screwHole=true);
-        
-        
+
+
         //module screwHole(size=3, length=10, headLen=4, clearance=0, support=false) {
-        
+
         move(x=-motorSize/2-10, z=-10+h-0.75)
-        yspread(motorSize/3,n=3) 
+        yspread(motorSize/3,n=3)
             screwHole(length=10,headLen=4, clearance=fit_clearance);
-        
+
     }
 }
 
@@ -393,8 +392,8 @@ module cover() {
 
     difference() {
         outerBody(h=cover_size[z]);
-        
-        //Motor screws 
+
+        //Motor screws
         //motorScrewPos(screwHole=true);
         move(x=motorScrewSpacing/2,y=-motorScrewSpacing/2)
             cylinder(d=m3_diameter,h=100,center=true);
@@ -402,14 +401,14 @@ module cover() {
             cylinder(d=m3_diameter,h=100,center=true);
         move(x=-motorScrewSpacing/2,y=motorScrewSpacing/2)
             cylinder(d=m3_diameter,h=100,center=true);
-        
+
         move(x=motorScrewSpacing/2,y=motorScrewSpacing/2,z=-2.5)
             screwHole(length=cover_size[z],headLen=4, clearance=fit_clearance);
-        
+
         // Planet carrier
         move(z=-1)
             cylinder(h=cover_size[z]+1-cover_wall-bearH, r=planet_carrier_radius+1);
-        
+
         // Bearing pocket
         move(z=cover_size[z]-bearH-cover_wall-1)
             cylinder(h=bearH+fit_clearance+1, d=bearD+fit_clearance);
@@ -438,11 +437,11 @@ module planetCarrierLower() {
 
 module planetCarrierVoid() {
     planet_radius = gearOuterRadius(planet_teeth);
-    
+
     // Sun gear
     move(z=-.1)
-    cylinder(r=max(sun_gear_hub_radius, gearOuterRadius(sun_teeth)) +moving_clearance*2, h=planet_carrier_bottom_plate_height+planet_gear_thread_height+moving_clearance+.1);    
-    
+    cylinder(r=max(sun_gear_hub_radius, gearOuterRadius(sun_teeth)) +moving_clearance*2, h=planet_carrier_bottom_plate_height+planet_gear_thread_height+moving_clearance+.1);
+
     //Planet gears
     zring(n=num_plantes)
     move(x=orbit_radius,z=planet_carrier_bottom_plate_height)
@@ -460,15 +459,15 @@ module planetCarrierVoid() {
     translate([0, 0, planet_carrier_height-layer_height*2+1])
         rotate([180, 0, 0])
         cylinder(h=m5_bolt_head_height+1, r=m5_diameter/2);
-    
+
     // Planet carrier nuts & bolts.
     zrot(360/num_plantes/2)
-    zring(n=3) 
-    move(x=orbit_radius) {        
+    zring(n=3)
+    move(x=orbit_radius) {
         move(z=planet_carrier_height/2) //headLen
-            zflip() 
+            zflip()
             screwHole(headLen=3,length=planet_carrier_height/2-3+.25,clearance=fit_clearance);
-        
+
         move(z=planet_carrier_height/2)
             nutHole(length=planet_carrier_height/2-3,headLen=3);
     }
@@ -480,7 +479,7 @@ module planetGear() {
     difference() {
         gear(teeth=planet_teeth,h=planet_gear_thread_height);
         cylinder(d=5+fit_clearance*2,h=1000,center=true);
-    }    
+    }
 }
 
 module sunGear() {
@@ -488,13 +487,13 @@ module sunGear() {
         union() {
             cylinder(h=sun_gear_hub_height, r=sun_gear_hub_radius);
             move(z=sun_gear_hub_height)
-                gear(sun_teeth, sun_gear_thread_height-.1);            
+                gear(sun_teeth, sun_gear_thread_height-.1);
         }
-        
+
         move(z=-1) //Motor shaft
             cylinder(h=sun_gear_hub_height+sun_gear_thread_height+2,
                 r=5/2+0.125);
-        
+
         //Madenschrauben
         move(z=sun_gear_hub_height/2)
             zrot_copy(90) xrot(90)
@@ -505,7 +504,7 @@ module sunGear() {
 
 module outerBody(h) {
     /*diaOffset = 6;
-    union() {        
+    union() {
         hull_around() {
             cylinder(d=gearOuterRadius(ring_teeth)*2+diaOffset,h=h);
             move(x=motorScrewSpacing/2,y=motorScrewSpacing/2)
@@ -526,14 +525,14 @@ module annulus() {
     difference() {
         //Basebody
         outerBody(h=annulus_size[z]);
-       
+
         move(z=-1) {
-            
+
             linear_extrude(height=annulus_size[z]+2) {
                 //Gear
                 gear2D(ring_teeth, gear_modulus, gear_pressure_angle, gear_depth_ratio, -gear_clearance);
             }
-            
+
             //Screwholes
             motorScrewPos(screwHole=true);
         }
