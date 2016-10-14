@@ -75,6 +75,8 @@ HPulleyHD = 1.5;  //Hobbed deepth
 HPulleyHT = 12; //Hobbed center from bottom
 
 
+FilamentZ = 5.5+1;
+FilamentX = (HPulleyD-HPulleyHD/2)/2 - 0.2;
 
 //=== Calced
 orbit_radius=((planet_teeth+sun_teeth)*gear_modulus)/2;
@@ -181,9 +183,11 @@ module extruderAssembly() {
 }
 
 module extruderCover() {
-    FilamentX = (HPulleyD-HPulleyHD/2)/2 + 0.2;
-    FilamentZ = 5.5;
     h = FilamentZ+5.5;
+    
+    headBearD = get_bearing_outer_diam(115);    
+    headBearH = get_bearing_height(115);        
+    
     bearD = get_bearing_outer_diam(IDLER_BEAR);
     bearH = get_bearing_height(IDLER_BEAR);    
     gap=0.5;   
@@ -199,26 +203,38 @@ module extruderCover() {
                 move(x=-motorSize/2+5,y=-motorSize/2+5)
                     cylinder(r=5,h=h);
             }
-            //outerBody(h=h);
         }
         
         // Aussparrung PTFE Tube
-        move(x=FilamentX,z=FilamentZ)
-        xrot(90)
-            cylinder(d=4,h=100,center=true);
+        move(x=FilamentX,z=FilamentZ) {
+            xrot(90) //Lower part
+                cylinder(d=4,h=100);
+            xrot(-90) //Funnel upper part
+                cylinder(d1=4,d2=2,h=motorSize/2-4.5+1);
+        }
         
         //Aussparrung PTFE Tube Holder PC4-01 
         move(x=FilamentX,z=FilamentZ,y=motorSize/2-4.5)
         xrot(-90)
-            cylinder(d=5.7,h=4.5+1);
+            cylinder(d=5.8,h=4.5+1);
         
         // Aussparrung idler
         move(x=10,y=-motorSize/2-10,z=-1) {
             cube([30,40,h+2]);
         }
+        move(x=FilamentX+bearD/2, z=-1) {
+            hull() {
+                cylinder(d=bearD+gap*2,h=h+2);
+                move(x=bearD/2)
+                    cylinder(d=bearD+gap*2,h=h+2);
+            }
+        }
         
-        //Smooth HobbedPulley to Bearing
+
         move(z=-1) {
+            //Cut HobbedPulley
+            cylinder(d=HPulleyD+2,h=h+2);
+            //Smooth HobbedPulley to Bearing            
             intersection() {
                 hull() {
                     cylinder(d=HPulleyD+2,h=h+2);//Cut HobbedPulley
@@ -230,17 +246,6 @@ module extruderCover() {
             }
         }
         
-        move(z=-1) {                      
-            cylinder(d=HPulleyD+2,h=h+2);//Cut HobbedPulley
-        }        
-        move(x=FilamentX+bearD/2, z=-1) {
-            hull() {
-                cylinder(d=bearD+gap*2,h=h+2);
-                move(x=bearD/2)
-                    cylinder(d=bearD+gap*2,h=h+2);
-            }
-        }
-        
         move(x=14-3.5, z=FilamentZ,y=motorScrewSpacing/2)
         yrot(90)
             spannfederCut();
@@ -248,7 +253,7 @@ module extruderCover() {
         //Nuts
         yflip_copy()
         move(x=-motorScrewSpacing/2,y=-motorScrewSpacing/2, z=11-4)
-            screw(screwlen=h,headlen=5,tolerance=fit_clearance*2);
+            screw(screwlen=h,headlen=6,tolerance=fit_clearance*2);
         
     }
 }
