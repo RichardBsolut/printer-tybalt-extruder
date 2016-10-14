@@ -106,87 +106,53 @@ echo("carrier height", planet_carrier_height);
 echo("cover size", cover_size[z]);
 echo("Full Height", base_size[z]+annulus_size[z]+cover_size[z]+11);//11==extruderCover
 
-//extruderAssembly();
-//$fn=50;
-//!cover();
-
 module plug() {
     cylinder(d=12,h=1.5);
     cylinder(d=8-fit_clearance,h=11+1.5);
 }
 
-module extruderAssembly() {
-    17HD(center=true);
-    basePlate();
-    move(z=1.5)zrot(15) sunGear();
+
+module fullExtruderCover() {
+    bearingH = get_bearing_height(115);
     
+    bearing(115);
+    move(z=HPulleyH+bearingH+0.5)
+    zflip() color("silver") hobbedPulley();
     
-    %move(x=-motorScrewSpacing/2,y=-motorScrewSpacing/2-5,z=40-6)
-        screw(screwlen=40);
-
-    %move(x=motorScrewSpacing/2,y=motorScrewSpacing/2+5,z=30-6)
-        screw(screwlen=30);
-
+    move(x=FilamentX,z=FilamentZ)
+    xrot(90) %cylinder(d=1.75,h=100,center=true);
     
-    move(z=base_size[z]+0.25) {
-        /*zrot(60) {
-            planetCarrierLower();
-        
-            zring(n=num_plantes)
-            move(x=orbit_radius,z=planet_carrier_bottom_plate_height)
-                planetGear();
-        }
-        move(z=.25)
-            planetCarrierUpper();
-        */
-        move(z=0) annulus();
+    intersection() {
+        extruderCover();
+        move(z=-50+11/2+1+25)
+            cube([100,100,100],center=true);
+    }
+    move(x=FilamentX,z=FilamentZ,y=motorSize/2-4.5)
+    xrot(-90)
+        PC401();
+}
 
-        color("silver")
-        move(z=planet_carrier_height-1)
-        zflip()
-            screw(screwsize=5,
-            headsize=get_metric_bolt_head_size(5), screwlen=25);
-
-        
-        move(z=annulus_size[z])
-            cover();        
-        
-        move(z=cover_size[z]+annulus_size[z]+fit_clearance) {
-            
-            move(z=2+1.5)
-            move(z=HPulleyH) zflip()
-            color("silver") hobbedPulley();
-            
-            move(z=2.4)
-            move(x=HPulleyD/2+get_bearing_outer_diam(608)/2)
-                bearing(608);
-            
-            /*#move(x=HPulleyD/2,y=motorSize/2,z=5.5)
-            xrot(-90)
-            color("silver")
-                myPC401();*/
-            
-            move(x=motorScrewSpacing/2,y=-motorScrewSpacing/2)
-            difference() {
-                zrot(-8)idler(h=11);
-                /*move(z=11/2-(3+fit_clearance*2)/2)
-                    cylinder(r=7,h=3+fit_clearance*2);*/
+module PC401() {
+    difference() {
+        union() {
+            color("goldenrod")  {
+                cylinder(d=5.7,h=4);
+                move(z=4) cylinder(d=8,h=6,$fn=8);
+                move(z=4+6) cylinder(d=7.8,h=5.5);
             }
+            move(z=4+6+5.5)
+                color("blue")cylinder(d=7.8,h=2);
             
-            
-            extruderCover();
         }
-        
-        //move(z=-43+cover_size[z]+annulus_size[z])
-        //    import("./help/Bowden_Extruder_SBS-175.stl");
-    }    
+        cylinder(d=4,h=100,center=true);
+    }
 }
 
 module extruderCover() {
-    h = FilamentZ+5.5;
+    h = FilamentZ+4.5;
     
-    headBearD = get_bearing_outer_diam(115);    
-    headBearH = get_bearing_height(115);        
+    headBearD = get_bearing_outer_diam(bearing);    
+    headBearH = get_bearing_height(bearing);
     
     bearD = get_bearing_outer_diam(IDLER_BEAR);
     bearH = get_bearing_height(IDLER_BEAR);    
@@ -351,17 +317,6 @@ module idler(h=12,diai=8) {
         }
 }
 
-module myPC401() {
-    difference() {
-        union() {
-            cylinder(d=5.7,h=4);
-            move(z=4)
-                cylinder(d=10,h=16,$fn=8);
-        }
-        cylinder(d=4,h=100,center=true);
-    }
-}
-
 module hobbedPulley() {
     difference() {
         cylinder(d=HPulleyD,h=HPulleyH);
@@ -369,6 +324,8 @@ module hobbedPulley() {
             rotate_extrude(convexity=10)
             move(x=HPulleyD/2)
                 circle(d=HPulleyHD);
+
+        //move(z=-1) cylinder(d=5,h=100,center=true); its an render bug .. because of rotate_extrude ?
     }
 }
 
